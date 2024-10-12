@@ -1,0 +1,15 @@
+:host {
+    core-search-box ion-card {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .core-tag-cloud ion-badge {
+        margin: 8px;
+        cursor: pointer;
+
+        .size1 {
+            font-size: 2rem;
+        }
+    }
+}
