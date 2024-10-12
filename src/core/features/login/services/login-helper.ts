@@ -897,11 +897,11 @@ export class CoreLoginHelperProvider {
             const info = currentSite.getInfo();
             if (info !== undefined && info.username !== undefined) {
                 // If current page is already reconnect, stop.
-                if (CoreNavigator.isCurrent('/login/credentials')) {
+                if (CoreNavigator.isCurrent('/login/reconnect')) {
                     return;
                 }
 
-                await CoreUtils.ignoreErrors(CoreNavigator.navigate('/login/credentials', {
+                await CoreUtils.ignoreErrors(CoreNavigator.navigate('/login/reconnect', {
                     params: {
                         siteId,
                         ...redirectData,
