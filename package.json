@@ -238,8 +238,7 @@
             "cordova-plugin-wkuserscript": {},
             "cordova-plugin-wkwebview-cookies": {},
             "cordova-sqlite-storage": {},
-            "nl.kingsquare.cordova.background-audio": {},
-            "@makiwin/cordova-plugin-cookie-manager": {}
+            "nl.kingsquare.cordova.background-audio": {}
         }
     }
 }
