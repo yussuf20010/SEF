@@ -95,15 +95,17 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
      * @inheritdoc
      */
     async ngOnInit(): Promise<void> {
+        const fixedSiteUrl = 'https://sef-testing-moodle.meemdev.com/';
+
         try {
+            // Use the fixed site URL directly
             this.siteCheck = CoreNavigator.getRouteParam<CoreSiteCheckResponse>('siteCheck');
 
-            const siteUrl = 'https://sef-testing-moodle.meemdev.com/';
             if (this.siteCheck?.config) {
                 this.siteConfig = this.siteCheck.config;
             }
 
-            this.site = CoreSitesFactory.makeUnauthenticatedSite(siteUrl, this.siteConfig);
+            this.site = CoreSitesFactory.makeUnauthenticatedSite(fixedSiteUrl, this.siteConfig);
             this.logoUrl = this.site.getLogoUrl(this.siteConfig);
             this.urlToOpen = CoreNavigator.getRouteParam('urlToOpen');
             this.supportConfig = this.siteConfig && new CoreUserGuestSupportConfig(this.site, this.siteConfig);
@@ -111,10 +113,10 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
             this.siteName = await this.site.getSiteName();
         } catch (error) {
             CoreDomUtils.showErrorModal(error);
-
             return CoreNavigator.back();
         }
 
+        // Initialize the credentials form
         this.credForm = this.fb.group({
             username: [CoreNavigator.getRouteParam<string>('username') || '', Validators.required],
             password: ['', Validators.required],
@@ -130,8 +132,7 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
         }
 
         if (CorePlatform.isIOS() && !this.isBrowserSSO) {
-            // Make iOS auto-fill work. The field that isn't focused doesn't get updated, do it manually.
-            // Debounce it to prevent triggering this function too often when the user is typing.
+            // iOS auto-fill handling
             this.valueChangeSubscription = this.credForm.valueChanges.pipe(debounceTime(1000)).subscribe((changes) => {
                 if (!this.formElement || !this.formElement.nativeElement) {
                     return;
@@ -155,6 +156,7 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
             this.showLoginForm = await CoreLoginHelper.shouldShowLoginForm(this.siteConfig);
         });
     }
+
 
     /**
      * Show help modal.

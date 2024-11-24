@@ -28,7 +28,7 @@ describe('CoreSitesProvider', () => {
 
     let langProvider: CoreLangProvider;
     beforeEach(() => {
-        langProvider = mockSingleton(CoreLang, mock({ getCurrentLanguage: async () => 'en' , clearCustomStrings: () => null }));
+        langProvider = mockSingleton(CoreLang, mock({ getCurrentLanguage: async () => 'en', clearCustomStrings: () => null }));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         mockSingleton(Http, { get: () => of(null as any) });
     });
@@ -40,7 +40,7 @@ describe('CoreSitesProvider', () => {
         CoreEvents.trigger(CoreEvents.LOGOUT);
 
         expect(langProvider.clearCustomStrings).toHaveBeenCalled();
-        expect(navigator.navigate).toHaveBeenCalledWith('/login/sites', { reset: true });
+        expect(navigator.navigate).toHaveBeenCalledWith('/login/credentials', { reset: true });
     });
 
     it('adds ionic platform and theme classes', async () => {
@@ -53,7 +53,8 @@ describe('CoreSitesProvider', () => {
 
         expect(document.documentElement.classList.contains('ionic8')).toBe(true);
 
-        const site = mock(new CoreSite('42', siteUrl, 'token', { info: {
+        const site = mock(new CoreSite('42', siteUrl, 'token', {
+            info: {
                 sitename: 'Example Campus',
                 username: 'admin',
                 firstname: 'Admin',
@@ -65,7 +66,8 @@ describe('CoreSitesProvider', () => {
                 userpictureurl: '',
                 theme: themeName,
                 functions: [],
-        } }));
+            }
+        }));
 
         mockSingleton(CoreSites, {
             getSite: () => Promise.resolve(site),
@@ -76,33 +78,33 @@ describe('CoreSitesProvider', () => {
         // Wait the event to be processed.
         await CoreWait.nextTick();
 
-        expect(document.documentElement.classList.contains('theme-site-'+themeName)).toBe(true);
-        expect(document.documentElement.classList.contains('theme-site-'+themeName2)).toBe(false);
+        expect(document.documentElement.classList.contains('theme-site-' + themeName)).toBe(true);
+        expect(document.documentElement.classList.contains('theme-site-' + themeName2)).toBe(false);
 
         if (site.infos) {
             site.infos.theme = themeName2;
         }
 
-        CoreEvents.trigger(CoreEvents.SITE_UPDATED, site.infos , '42');
+        CoreEvents.trigger(CoreEvents.SITE_UPDATED, site.infos, '42');
 
         // Wait the event to be processed.
         await CoreWait.nextTick();
 
-        expect(document.documentElement.classList.contains('theme-site-'+themeName2)).toBe(true);
-        expect(document.documentElement.classList.contains('theme-site-'+themeName)).toBe(false);
+        expect(document.documentElement.classList.contains('theme-site-' + themeName2)).toBe(true);
+        expect(document.documentElement.classList.contains('theme-site-' + themeName)).toBe(false);
 
         CoreEvents.trigger(CoreEvents.LOGOUT);
 
-        expect(document.documentElement.classList.contains('theme-site-'+themeName)).toBe(false);
-        expect(document.documentElement.classList.contains('theme-site-'+themeName2)).toBe(false);
+        expect(document.documentElement.classList.contains('theme-site-' + themeName)).toBe(false);
+        expect(document.documentElement.classList.contains('theme-site-' + themeName2)).toBe(false);
 
-        CoreEvents.trigger(CoreEvents.SITE_ADDED, site.infos , '42');
+        CoreEvents.trigger(CoreEvents.SITE_ADDED, site.infos, '42');
 
         // Wait the event to be processed.
         await CoreWait.nextTick();
 
-        expect(document.documentElement.classList.contains('theme-site-'+themeName2)).toBe(true);
-        expect(document.documentElement.classList.contains('theme-site-'+themeName)).toBe(false);
+        expect(document.documentElement.classList.contains('theme-site-' + themeName2)).toBe(true);
+        expect(document.documentElement.classList.contains('theme-site-' + themeName)).toBe(false);
     });
 
 });

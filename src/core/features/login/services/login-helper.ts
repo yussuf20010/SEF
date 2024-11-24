@@ -453,7 +453,7 @@ export class CoreLoginHelperProvider {
             return ['/login/credentials', { siteUrl: sites[0].url }];
         }
 
-        return ['/login/site', { showKeyboard }];
+        return ['/login/credentials', { showKeyboard }];
     }
 
     /**

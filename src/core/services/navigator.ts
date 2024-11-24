@@ -176,7 +176,7 @@ export class CoreNavigatorService {
      */
     async navigateToLoginCredentials(params: Params = {}): Promise<boolean> {
         // If necessary, open the previous path to keep the navigation history.
-        if (!this.isCurrent('/login/site') && !this.isCurrent('/login/credentials')) {
+        if (!this.isCurrent('/login/credentials') && !this.isCurrent('/login/credentials')) {
             const hasSites = await CoreSites.hasSites();
 
             await this.navigate(hasSites ? '/login/credentials' : '/login/credentials', { reset: true });
