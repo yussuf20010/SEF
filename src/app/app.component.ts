@@ -28,6 +28,7 @@ import { CorePromisedValue } from '@classes/promised-value';
 import { register } from 'swiper/element/bundle';
 import { CoreWait } from '@singletons/wait';
 import { CoreOpener } from '@singletons/opener';
+import { CoreLang } from '@services/lang';
 
 register();
 
@@ -46,7 +47,8 @@ export class AppComponent implements OnInit, AfterViewInit {
      */
     ngOnInit(): void {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const win = <any> window;
+        const win = <any>window;
+        this.setAppDirection();
 
         CorePlatform.resume.subscribe(() => {
             // Wait a second before setting it to false since in iOS there could be some frozen WS calls.
@@ -99,7 +101,20 @@ export class AppComponent implements OnInit, AfterViewInit {
         // @todo Pause Youtube videos in Android when app is put in background or screen is locked?
         // See: https://github.com/moodlehq/moodleapp/blob/ionic3/src/app/app.component.ts#L312
     }
+    /**
+       * Check language on app startup and apply RTL if the language is Arabic.
+       */
+    private async setAppDirection(): Promise<void> {
+        const currentLanguage = await CoreLang.getCurrentLanguage();
 
+        if (currentLanguage === 'ar') {
+            // Set direction to RTL for Arabic language
+            document.documentElement.setAttribute('dir', 'rtl');
+        } else {
+            // Set direction to LTR for other languages
+            document.documentElement.setAttribute('dir', 'ltr');
+        }
+    }
     /**
      * @inheritdoc
      */

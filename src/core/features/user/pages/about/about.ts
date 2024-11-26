@@ -84,6 +84,25 @@ export class CoreUserAboutPage implements OnInit, OnDestroy {
             this.userLoaded = true;
         });
     }
+    cleancleanTranslation(value: string): string {
+        // Regex to remove the multilingual tags like {mlang ar} and {mlang other}
+        const cleanedValue = value.replace(/{mlang\s+\w+}/g, '').trim();
+
+        // Match for Arabic and English translations inside the {mlang} tags
+        const matches = value.match(/{mlang ar}([^{}]*){mlang}.*{mlang other}([^{}]*){mlang}/);
+
+        if (matches && matches.length > 2) {
+            // Get the current language from the translate service
+            const currentLang = this.translate.currentLang;
+
+            // If the current language is 'ar', return the Arabic translation; otherwise, return the English translation.
+            return currentLang === 'ar' ? matches[1] : matches[2];
+        }
+
+        // If no match is found or translation tags are not present, return the cleaned value.
+        return cleanedValue;
+    }
+
 
     /**
      * Fetches the user data.
@@ -97,8 +116,14 @@ export class CoreUserAboutPage implements OnInit, OnDestroy {
             // Clean the custom fields or any other multilingual data
             if (user.customfields) {
                 user.customfields = user.customfields.map(field => {
-                    if (field && field.value) {
-                        field.value = this.cleanTranslation(field.value);
+                    if (field) {
+                        // Translate and clean both the value and the label
+                        if (field.value) {
+                            field.value = this.cleancleanTranslation(field.value);
+                        }
+                        if (field.name) {
+                            field.name = this.cleancleanTranslation(field.name);
+                        }
                     }
                     return field;
                 });
@@ -121,14 +146,7 @@ export class CoreUserAboutPage implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Clean the translation string by removing {mlang} tags.
-     * @param data the translation string with mlang tags.
-     * @returns cleaned string.
-     */
-    cleanTranslation(data: string): string {
-        return data.replace(/{mlang.*?}(.*?)\{mlang.*?}/g, '$1').trim();
-    }
+
     /**
      * format city name.
      *

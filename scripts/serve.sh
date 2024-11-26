@@ -28,4 +28,5 @@ for ((i=0; i<total; ++i)); do
 done
 
 # Serve app.
+echo "> NODE_OPTIONS=--max-old-space-size=4096 ng run app:$angulartarget ${args[@]}"
 NODE_OPTIONS=--max-old-space-size=4096 ng run "app:$angulartarget" ${args[@]}

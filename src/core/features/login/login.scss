@@ -72,13 +72,11 @@
     }
 
     .core-login-login-button ion-icon {
-        margin-right: 10px;
-        /* Ensure some space between icon and text */
-        order: -1;
-        /* Position icon before text */
-        font-size: 1.2rem;
-        /* Ensure the icon size is large enough */
+        margin-right: 10px; /* Ensure some space between icon and text */
+        order: -1; /* Position icon before text */
+        font-size: 1.2rem; /* Ensure the icon size is large enough */
     }
+
 
     .core-login-login-button span {
         display: inline-block;

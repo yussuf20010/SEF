@@ -18,7 +18,7 @@
         }
     ],
     "scripts": {
-        "ng": "ng",
+        "ng": "ng", 
         "start": "ionic serve --browser=$MOODLE_APP_BROWSER --ssl",
         "serve:test": "NODE_ENV=testing ionic serve --no-open",
         "build": "NODE_OPTIONS=--max-old-space-size=8192 ionic build --configuration=development",
@@ -36,10 +36,9 @@
         "test:coverage": "NODE_ENV=testing gulp && jest --coverage",
         "lint": "NODE_OPTIONS=--max-old-space-size=8192 ng lint",
         "ionic:serve:before": "gulp",
-        "ionic:serve": "cross-env-shell ./scripts/serve.sh",
         "ionic:build:before": "gulp",
         "postinstall": "patch-package && cd cordova-plugin-moodleapp && npm install",
-        "lang:update-langpacks": "./scripts/update_langpacks.sh",
+        "lang:update-langpacks": "./scripts/update_langpacks.sh", 
         "lang:detect-langpacks": "./scripts/update_langpacks.sh detect",
         "lang:create-langindex": "./scripts/create_langindex.sh"
     },

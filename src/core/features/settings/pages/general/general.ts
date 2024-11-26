@@ -122,7 +122,6 @@ export class CoreSettingsGeneralPage {
         const previousLanguage = await CoreLang.getCurrentLanguage();
         if (this.selectedLanguage === previousLanguage) {
             // Prevent opening again.
-
             return;
         }
 
@@ -130,6 +129,9 @@ export class CoreSettingsGeneralPage {
 
         try {
             await CoreLang.changeCurrentLanguage(this.selectedLanguage);
+
+            // Apply direction change based on the selected language.
+            this.changePageDirection(this.selectedLanguage);
         } finally {
             const langName = this.languages.find((lang) => lang.code == this.selectedLanguage)?.name;
 
@@ -163,6 +165,17 @@ export class CoreSettingsGeneralPage {
                 await alert.dismiss();
                 this.applyLanguageAndRestart();
             }, 10000);
+        }
+    }
+
+    /**
+     * Change the direction of the page based on the selected language.
+     */
+    protected changePageDirection(languageCode: string): void {
+        if (languageCode === 'ar') {
+            document.documentElement.setAttribute('dir', 'rtl');  // Set RTL direction
+        } else {
+            document.documentElement.setAttribute('dir', 'ltr');  // Set LTR direction
         }
     }
 

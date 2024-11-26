@@ -326,7 +326,7 @@ export class CoreStylesService {
     protected disableStyleElement(element: HTMLStyleElement, disable: boolean): void {
         // Setting disabled should be enough, but we also set the attribute so it can be seen in the DOM which ones are disabled.
         // Cast to any because the HTMLStyleElement type doesn't define the disabled attribute.
-        (<any> element).disabled = !!disable; // eslint-disable-line @typescript-eslint/no-explicit-any
+        (<any>element).disabled = !!disable; // eslint-disable-line @typescript-eslint/no-explicit-any
 
         if (disable) {
             element.setAttribute('media', 'disabled');
