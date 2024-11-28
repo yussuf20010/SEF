@@ -64,8 +64,6 @@ export class CoreMainMenuUserButtonComponent implements OnInit {
 
     ngOnInit(): void {
         this.isMainScreen = !this.routerOutlet.canGoBack();
-
-        // Subscribe to language changes
         this.languageChangeSubscription = this.translateService.onLangChange.subscribe(() => {
             this.refreshSiteInfo(); // Update siteInfo on language change
         });

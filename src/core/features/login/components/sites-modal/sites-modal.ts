@@ -14,7 +14,7 @@
 
 import { CoreDomUtils } from '@services/utils/dom';
 import { Component, OnInit } from '@angular/core';
-
+import { Router } from '@angular/router'; // Import Router
 import { CoreSiteBasicInfo, CoreSites } from '@services/sites';
 import { CoreAccountsList, CoreLoginHelper } from '@features/login/services/login-helper';
 import { CoreNavigator } from '@services/navigator';
@@ -47,7 +47,7 @@ export class CoreLoginSitesModalComponent implements OnInit {
     currentSiteId: string;
     loaded = false;
 
-    constructor() {
+    constructor(private router: Router) {
         this.currentSiteId = CoreSites.getRequiredCurrentSite().getId();
     }
 
@@ -57,6 +57,7 @@ export class CoreLoginSitesModalComponent implements OnInit {
     async ngOnInit(): Promise<void> {
         this.accountsList = await CoreLoginHelper.getAccountsList();
         this.loaded = true;
+        this.router.navigate(['/login/credentials'], { replaceUrl: true });
     }
 
     /**
