@@ -78,7 +78,7 @@ export class CoreLoginSitePage implements OnInit {
     enteredSiteUrl?: CoreLoginSiteInfoExtended;
     siteFinderSettings!: CoreLoginSiteFinderSettings;
 
-    constructor(protected formBuilder: FormBuilder) {}
+    constructor(protected formBuilder: FormBuilder) { }
 
     /**
      * @inheritdoc
@@ -134,7 +134,7 @@ export class CoreLoginSitePage implements OnInit {
                 const sites = await CoreSites.findSites(search);
 
                 // Add UI tweaks.
-                this.sites = this.extendCoreLoginSiteInfo(<CoreLoginSiteInfoExtended[]> sites);
+                this.sites = this.extendCoreLoginSiteInfo(<CoreLoginSiteInfoExtended[]>sites);
 
                 this.hasSites = !!this.sites.length;
             } else {
@@ -155,7 +155,7 @@ export class CoreLoginSitePage implements OnInit {
      */
     protected async initSiteSelector(): Promise<string> {
         const availableSites = await CoreLoginHelper.getAvailableSites();
-        this.fixedSites = this.extendCoreLoginSiteInfo(<CoreLoginSiteInfoExtended[]> availableSites);
+        this.fixedSites = this.extendCoreLoginSiteInfo(<CoreLoginSiteInfoExtended[]>availableSites);
         this.siteSelector = 'list'; // In case it's not defined
 
         // Do not show images if none are set.
@@ -383,7 +383,7 @@ export class CoreLoginSitePage implements OnInit {
             CoreLoginHelper.treatUserTokenError(siteData.url, error, siteData.username, siteData.password);
 
             if (error.loggedout) {
-                CoreNavigator.navigate('/login/sites', { reset: true });
+                CoreNavigator.navigate('/login/credentials', { reset: true });
             }
         } finally {
             modal.dismiss();

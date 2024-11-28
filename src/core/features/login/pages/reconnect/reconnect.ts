@@ -220,7 +220,7 @@ export class CoreLoginReconnectPage implements OnInit, OnDestroy {
 
         if (this.isLoggedOut) {
             // Go to sites page when user is logged out.
-            CoreNavigator.navigate('/login/sites', { reset: true });
+            CoreNavigator.navigate('/login/credentials', { reset: true });
         }
 
         CoreSites.logout();

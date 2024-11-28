@@ -360,7 +360,7 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
      * Open email signup page.
      */
     openEmailSignup(): void {
-        CoreNavigator.navigate('/login/emailsignup', { params: { siteUrl: this.site.getURL() } });
+        CoreNavigator.navigate('/login/credentials', { params: { siteUrl: this.site.getURL() } });
     }
 
     /**

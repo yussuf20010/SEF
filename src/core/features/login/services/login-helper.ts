@@ -136,7 +136,7 @@ export class CoreLoginHelperProvider {
         if (
             !CoreSSO.isSSOAuthenticationOngoing() &&
             currentSite?.isLoggedOut() &&
-            CoreNavigator.isCurrent('/login/reconnect')
+            CoreNavigator.isCurrent('/login/credentials')
         ) {
             // User must reauthenticate but he closed the InAppBrowser without doing so, logout him.
             CoreSites.logout();
@@ -186,7 +186,7 @@ export class CoreLoginHelperProvider {
             const canReset = await this.canRequestPasswordReset(siteUrl);
 
             if (canReset) {
-                await CoreNavigator.navigate('/login/forgottenpassword', {
+                await CoreNavigator.navigate('/login/credentials', {
                     params: {
                         siteUrl,
                         siteConfig,
@@ -424,7 +424,7 @@ export class CoreLoginHelperProvider {
             return ['/login/credentials', { siteUrl: sites[0].url }];
         }
 
-        return ['/login/site', { showKeyboard }];
+        return ['/login/credentials', { showKeyboard }];
     }
 
     /**
@@ -738,11 +738,11 @@ export class CoreLoginHelperProvider {
         }
 
         // If current page is already change password, stop.
-        if (CoreNavigator.isCurrent('/login/changepassword')) {
+        if (CoreNavigator.isCurrent('/login/credentials')) {
             return;
         }
 
-        await CoreNavigator.navigate('/login/changepassword', { params: { siteId }, reset: true });
+        await CoreNavigator.navigate('/login/credentials', { params: { siteId }, reset: true });
     }
 
     /**
@@ -844,11 +844,11 @@ export class CoreLoginHelperProvider {
             const info = currentSite.getInfo();
             if (info !== undefined && info.username !== undefined) {
                 // If current page is already reconnect, stop.
-                if (CoreNavigator.isCurrent('/login/reconnect')) {
+                if (CoreNavigator.isCurrent('/login/credentials')) {
                     return;
                 }
 
-                await CorePromiseUtils.ignoreErrors(CoreNavigator.navigate('/login/reconnect', {
+                await CorePromiseUtils.ignoreErrors(CoreNavigator.navigate('/login/credentials', {
                     params: {
                         siteId,
                         ...redirectData,
