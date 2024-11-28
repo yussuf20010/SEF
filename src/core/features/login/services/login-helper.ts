@@ -637,8 +637,12 @@ export class CoreLoginHelperProvider {
 
             if (this.isSSOEmbeddedBrowser(typeOfLogin)) {
                 CoreOpener.openInApp(loginUrl, {
-                    clearsessioncache: 'yes', // Clear the session cache to allow for multiple logins.
+                    clearsessioncache: 'yes', // Clear session cache for multiple logins.
                     closebuttoncaption: Translate.instant('core.login.cancel'),
+                    location: 'no',  // Hides the URL bar.
+                    toolbar: 'no',   // Hides the toolbar.
+                    hidespinner: 'yes', // Hides loading spinner (optional).
+                    hideurlbar: 'yes',
                 });
             } else {
                 CoreOpener.openInBrowser(loginUrl, { showBrowserWarning: false });
