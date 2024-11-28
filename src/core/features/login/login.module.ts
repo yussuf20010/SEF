@@ -67,4 +67,4 @@ const appRoutes: Routes = [
         },
     ],
 })
-export class CoreLoginModule {}
+export class CoreLoginModule { }

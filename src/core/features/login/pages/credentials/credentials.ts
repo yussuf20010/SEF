@@ -95,23 +95,29 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
      * @inheritdoc
      */
     async ngOnInit(): Promise<void> {
+        // Use the fixed site URL directly
         const fixedSiteUrl = 'https://sef-testing-moodle.meemdev.com/';
 
         try {
-            // Use the fixed site URL directly
-            this.siteCheck = CoreNavigator.getRouteParam<CoreSiteCheckResponse>('siteCheck');
+            // Create an unauthenticated site instance using the fixed site URL
+            this.site = CoreSitesFactory.makeUnauthenticatedSite(fixedSiteUrl);
 
+            // Set site configuration if available
+            this.siteCheck = CoreNavigator.getRouteParam<CoreSiteCheckResponse>('siteCheck');
             if (this.siteCheck?.config) {
                 this.siteConfig = this.siteCheck.config;
             }
 
-            this.site = CoreSitesFactory.makeUnauthenticatedSite(fixedSiteUrl, this.siteConfig);
+            // Get logo URL and other configurations
             this.logoUrl = this.site.getLogoUrl(this.siteConfig);
-            this.urlToOpen = CoreNavigator.getRouteParam('urlToOpen');
             this.supportConfig = this.siteConfig && new CoreUserGuestSupportConfig(this.site, this.siteConfig);
             this.displaySiteUrl = this.site.shouldDisplayInformativeLinks();
             this.siteName = await this.site.getSiteName();
+
+            // Set up the URL to open, which is optional
+            this.urlToOpen = CoreNavigator.getRouteParam('urlToOpen');
         } catch (error) {
+            // Display an error modal and navigate back if an error occurs
             CoreDomUtils.showErrorModal(error);
             return CoreNavigator.back();
         }
@@ -124,6 +130,7 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
 
         await this.checkSite();
 
+        // Handle browser SSO if enabled
         if (this.isBrowserSSO && CoreLoginHelper.shouldSkipCredentialsScreenOnSSO()) {
             const launchedWithTokenURL = await CoreCustomURLSchemes.appLaunchedWithTokenURL();
             if (!launchedWithTokenURL) {
@@ -131,8 +138,8 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
             }
         }
 
+        // iOS auto-fill handling for form fields
         if (CorePlatform.isIOS() && !this.isBrowserSSO) {
-            // iOS auto-fill handling
             this.valueChangeSubscription = this.credForm.valueChanges.pipe(debounceTime(1000)).subscribe((changes) => {
                 if (!this.formElement || !this.formElement.nativeElement) {
                     return;
@@ -152,6 +159,7 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
             });
         }
 
+        // Observer for login form display changes
         this.alwaysShowLoginFormObserver = CoreEvents.on(ALWAYS_SHOW_LOGIN_FORM_CHANGED, async () => {
             this.showLoginForm = await CoreLoginHelper.shouldShowLoginForm(this.siteConfig);
         });
