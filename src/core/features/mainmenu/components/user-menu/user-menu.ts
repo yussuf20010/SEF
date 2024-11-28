@@ -293,8 +293,6 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
      */
     async addAccount(event: Event): Promise<void> {
         await this.close(event);
-
-        await CoreLoginHelper.goToAddSite(true, true);
     }
 
     /**
