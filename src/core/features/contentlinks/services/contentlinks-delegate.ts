@@ -195,7 +195,7 @@ export class CoreContentLinksDelegateService {
 
                 const actions = await CorePromiseUtils.ignoreErrors(
                     Promise.resolve(handler.getActions(siteIds, relativeUrl, params, courseId, data)),
-                    <CoreContentLinksAction[]> [],
+                    <CoreContentLinksAction[]>[],
                 );
 
                 if (actions && actions.length) {

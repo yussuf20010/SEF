@@ -31,8 +31,10 @@ const paths = {
 };
 
 // Build the language files into a single file per language.
-gulp.task('lang', (done) => {
-    new BuildLangTask().run(paths.lang, done);
+// Exclude language files from being processed
+gulp.task('lang', function() {
+    return gulp.src(['./src/assets/lang/**/*.json', '!./src/assets/lang/en.json', '!./src/assets/lang/ar.json'])
+        .pipe(gulp.dest('./www/assets/lang'));
 });
 
 // Use the English generated lang file (src/assets/lang/en.json) to override strings in features lang.json files.

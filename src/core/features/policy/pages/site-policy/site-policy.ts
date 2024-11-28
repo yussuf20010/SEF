@@ -66,14 +66,14 @@ export class CorePolicySitePolicyPage implements OnInit, OnDestroy {
     agreeInOwnPage = false;
     numPolicy = 1;
     showConsentForm = false;
-    stepData?: { numpolicy: number; totalpolicies: number };
+    stepData?: {numpolicy: number; totalpolicies: number};
     policiesErrors = { required: Translate.instant('core.policy.mustagreetocontinue') };
 
     protected siteId?: string;
     protected currentSite!: CoreSite;
     protected layoutSubscription?: Subscription;
 
-    constructor(protected elementRef: ElementRef, protected changeDetector: ChangeDetectorRef) { }
+    constructor(protected elementRef: ElementRef, protected changeDetector: ChangeDetectorRef) {}
 
     /**
      * @inheritdoc
@@ -280,9 +280,7 @@ export class CorePolicySitePolicyPage implements OnInit, OnDestroy {
      * @returns Promise resolved when done.
      */
     async cancel(): Promise<void> {
-        await CorePromiseUtils.ignoreErrors(CoreSites.logout());
-
-        await CoreNavigator.navigate('/login/credentials', { reset: true });
+        await CoreSites.logout();
     }
 
     /**

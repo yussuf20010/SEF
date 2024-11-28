@@ -170,7 +170,7 @@ export class CoreUtilsProvider {
      * @returns IAB instance, undefined if not open.
      * @deprecated since 5.0. Use CoreOpener.getInAppBrowserInstance instead.
      */
-    getInAppBrowserInstance(): InAppBrowserObject | undefined  {
+    getInAppBrowserInstance(): InAppBrowserObject | undefined {
         return CoreOpener.getInAppBrowserInstance();
     }
 
@@ -617,7 +617,7 @@ export class CoreUtilsProvider {
      * @deprecated since 5.0. Use CoreObject.toArrayOfObjects instead.
      */
     objectToArrayOfObjects<
-        A extends Record<string,unknown> = Record<string, unknown>,
+        A extends Record<string, unknown> = Record<string, unknown>,
         O extends Record<string, unknown> = Record<string, unknown>
     >(
         obj: O,
@@ -645,7 +645,7 @@ export class CoreUtilsProvider {
         keyName: string,
         valueName: string,
         keyPrefix?: string,
-    ): {[name: string]: T} {
+    ): { [name: string]: T } {
         return CoreObject.toKeyValueMap(objects, keyName, valueName, keyPrefix);
     }
 
@@ -880,7 +880,7 @@ export class CoreUtilsProvider {
     async ignoreErrors<Result>(promise?: Promise<Result>): Promise<Result | undefined>;
     async ignoreErrors<Result, Fallback>(promise: Promise<Result>, fallback: Fallback): Promise<Result | Fallback>;
     async ignoreErrors<Result, Fallback>(promise?: Promise<Result>, fallback?: Fallback): Promise<Result | Fallback | undefined> {
-        if(promise) {
+        if (promise) {
             return CorePromiseUtils.ignoreErrors(promise, fallback);
         }
 

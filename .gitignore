@@ -68,10 +68,5 @@ circular-dependencies
 .DS_Store
 Thumbs.db
 
-# Moodle App
-/src/assets/lib
-/src/assets/env.json
-/src/assets/fonts/icons.json
-
 /moodle.config.*.json
 !/moodle.config.example.json

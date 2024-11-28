@@ -78,4 +78,4 @@ const routes: Routes = [
         CoreLoginEmailSignupPage,
     ],
 })
-export default class CoreLoginLazyModule {}
+export default class CoreLoginLazyModule { }
