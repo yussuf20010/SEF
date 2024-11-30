@@ -1,4 +1,5 @@
 @use "theme/globals" as *;
+
 core-progress-bar {
     --bar-margin: 8px 0px 4px 0px;
     --line-height: 20px;
@@ -23,7 +24,7 @@ ion-item.item {
     }
 
     &.item-hightlighted {
-        @include safe-area-border-start(var(--selected-item-border-width), solid,  var(--selected-item-color));
+        @include safe-area-border-start(var(--selected-item-border-width), solid, var(--selected-item-color));
     }
 
     &.divider.section {
@@ -44,6 +45,7 @@ ion-item.item {
             padding: 13px;
             margin: 3px;
             border-radius: 50%;
+
             &:hover {
                 background: var(--secondary);
             }
@@ -59,32 +61,46 @@ ion-item.item {
             --padding-start: 0px;
         }
 
-        &.item-hightlighted ion-icon.completioninfo {
-            @include padding-horizontal(11px, null);
-        }
-
         &.indented {
             margin-inline-start: 1rem;
         }
 
     }
 
-    ion-icon {
-        margin: 0px;
-        padding: 12px 16px;
+    ion-icon.completion_none {
+        color: rgb(176, 35, 148) !important;
+        background-color: rgb(176, 35, 148) !important;
+        border-radius: 50%;
+        width: 8px;
+        height: 8px;
+        font-size: 6;
+        padding: 0;
+        margin: 0 8px;
+        display: inline-block;
+    }
 
-        &.completioninfo {
-            font-size: #{dynamic-font(10px)};
-            width: 18px;
-        }
+    ion-icon.completion_complete {
+        color: white !important;
+        background-color: white !important;
+        border-radius: 50%;
+        width: 8px;
+        height: 8px;
+        font-size: 4px;
+        padding: 0;
+        margin: 0 8px;
+        display: inline-block;
+    }
 
-        &.restricted {
-            font-size: var(--text-size);
-        }
-        &[role=button] {
-            min-height: auto;
-            min-width: auto;
-        }
+    ion-icon.completion_incomplete {
+        color: rgb(196, 0, 0) !important;
+        background-color: rgb(196, 0, 0) !important;
+        border-radius: 50%;
+        width: 8px;
+        height: 8px;
+        font-size: 4px;
+        padding: 0;
+        margin: 0 8px;
+        display: inline-block;
     }
 }
 

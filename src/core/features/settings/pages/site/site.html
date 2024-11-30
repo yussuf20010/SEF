@@ -29,7 +29,7 @@
             </ion-list>
 
             <ion-card>
-                <ion-item class="ion-text-wrap">
+                <!-- <ion-item class="ion-text-wrap">
                     <ion-label>
                         <p class="item-heading">{{ 'core.settings.synchronizenow' | translate }}</p>
                         <p>
@@ -42,7 +42,7 @@
                             <ion-icon name="fas-rotate" slot="icon-only" aria-hidden="true" />
                         </ion-button>
                     </core-button-with-spinner>
-                </ion-item>
+                </ion-item> -->
                 <ion-item class="core-warning-item ion-text-wrap" *ngIf="!isOnline || (dataSaver && limitedConnection)">
                     <ion-icon name="fas-triangle-exclamation" slot="start" aria-hidden="true" />
                     <ion-label>

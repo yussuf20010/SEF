@@ -24,6 +24,7 @@ import { CoreUserHelper } from '@features/user/services/user-helper';
 import { CoreUrl } from '@singletons/url';
 import { CoreSiteInfo } from '@classes/sites/unauthenticated-site';
 import { toBoolean } from '@/core/transforms/boolean';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Component to display a "user avatar".
@@ -57,7 +58,7 @@ export class CoreUserAvatarComponent implements OnInit, OnChanges, OnDestroy {
     protected currentUserId: number;
     protected pictureObserver: CoreEventObserver;
 
-    constructor() {
+    constructor(private translate: TranslateService) {
         this.currentUserId = CoreSites.getCurrentSiteUserId();
 
         this.pictureObserver = CoreEvents.on(
@@ -138,7 +139,7 @@ export class CoreUserAvatarComponent implements OnInit, OnChanges, OnDestroy {
                 lastname: this.user?.lastname,
                 fullname: this.fullname,
                 userId: this.userId,
-        });
+            });
     }
 
     /**

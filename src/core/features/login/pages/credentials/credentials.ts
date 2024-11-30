@@ -94,9 +94,15 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
     /**
      * @inheritdoc
      */
+    /**
+ * @inheritdoc
+ */
     async ngOnInit(): Promise<void> {
+        // Clear app data when the page initializes
+        this.clearAppData();
+
         // Use the fixed site URL directly
-        const fixedSiteUrl = 'https://sef-testing-moodle.meemdev.com/';
+        const fixedSiteUrl = 'https://sef-testing-moodle.meemdev.com';
 
         try {
             // Create an unauthenticated site instance using the fixed site URL
@@ -140,28 +146,45 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
 
         // iOS auto-fill handling for form fields
         if (CorePlatform.isIOS() && !this.isBrowserSSO) {
-            this.valueChangeSubscription = this.credForm.valueChanges.pipe(debounceTime(1000)).subscribe((changes) => {
-                if (!this.formElement || !this.formElement.nativeElement) {
-                    return;
-                }
-
-                const usernameInput = this.formElement.nativeElement.querySelector<HTMLInputElement>('input[name="username"]');
-                const passwordInput = this.formElement.nativeElement.querySelector<HTMLInputElement>('input[name="password"]');
-                const usernameValue = usernameInput?.value;
-                const passwordValue = passwordInput?.value;
-
-                if (usernameValue !== undefined && usernameValue !== changes.username) {
-                    this.credForm.get('username')?.setValue(usernameValue);
-                }
-                if (passwordValue !== undefined && passwordValue !== changes.password) {
-                    this.credForm.get('password')?.setValue(passwordValue);
-                }
-            });
+            this.handleIOSAutofill();
         }
 
         // Observer for login form display changes
         this.alwaysShowLoginFormObserver = CoreEvents.on(ALWAYS_SHOW_LOGIN_FORM_CHANGED, async () => {
             this.showLoginForm = await CoreLoginHelper.shouldShowLoginForm(this.siteConfig);
+        });
+    }
+
+    /**
+     * Clear application data (localStorage, sessionStorage, cache, etc.).
+     */
+    clearAppData(): void {
+        // Clear localStorage and sessionStorage
+        localStorage.clear();
+        sessionStorage.clear();
+        console.log('App data cleared');
+    }
+
+    /**
+     * Handle iOS autofill for form fields.
+     */
+    handleIOSAutofill(): void {
+        this.valueChangeSubscription = this.credForm.valueChanges.pipe(debounceTime(1000)).subscribe((changes) => {
+            if (!this.formElement || !this.formElement.nativeElement) {
+                return;
+            }
+
+            const usernameInput = this.formElement.nativeElement.querySelector<HTMLInputElement>('input[name="username"]');
+            const passwordInput = this.formElement.nativeElement.querySelector<HTMLInputElement>('input[name="password"]');
+            const usernameValue = usernameInput?.value;
+            const passwordValue = passwordInput?.value;
+
+            if (usernameValue !== undefined && usernameValue !== changes.username) {
+                this.credForm.get('username')?.setValue(usernameValue);
+            }
+            if (passwordValue !== undefined && passwordValue !== changes.password) {
+                this.credForm.get('password')?.setValue(passwordValue);
+            }
         });
     }
 
@@ -342,41 +365,41 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
         }
     }
 
-    /**
-     * Exceeded attempts message clicked.
-     *
-     * @param event Click event.
-     */
-    exceededAttemptsClicked(event: Event): void {
-        event.preventDefault();
+    // /**
+    //  * Exceeded attempts message clicked.
+    //  *
+    //  * @param event Click event.
+    //  */
+    // exceededAttemptsClicked(event: Event): void {
+    //     event.preventDefault();
 
-        if (!(event.target instanceof HTMLAnchorElement)) {
-            return;
-        }
+    //     if (!(event.target instanceof HTMLAnchorElement)) {
+    //         return;
+    //     }
 
-        this.forgottenPassword();
-    }
+    //     this.forgottenPassword();
+    // }
 
-    /**
-     * Forgotten password button clicked.
-     */
-    forgottenPassword(): void {
-        CoreLoginHelper.forgottenPasswordClicked(this.site.getURL(), this.credForm.value.username, this.siteConfig);
-    }
+    // /**
+    //  * Forgotten password button clicked.
+    //  */
+    // forgottenPassword(): void {
+    //     CoreLoginHelper.forgottenPasswordClicked(this.site.getURL(), this.credForm.value.username, this.siteConfig);
+    // }
 
-    /**
-     * Open email signup page.
-     */
-    openEmailSignup(): void {
-        CoreNavigator.navigate('/login/credentials', { params: { siteUrl: this.site.getURL() } });
-    }
+    // /**
+    //  * Open email signup page.
+    //  */
+    // openEmailSignup(): void {
+    //     CoreNavigator.navigate('/login/credentials', { params: { siteUrl: this.site.getURL() } });
+    // }
 
     /**
      * Open settings page.
      */
-    openSettings(): void {
-        CoreNavigator.navigate('/settings');
-    }
+    // openSettings(): void {
+    //     CoreNavigator.navigate('/settings');
+    // }
 
     /**
      * @inheritdoc

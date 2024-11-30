@@ -248,12 +248,31 @@ export class CoreUserDelegateService extends CoreDelegate<CoreUserProfileHandler
 
         CoreEvents.on(CoreEvents.LOGOUT, () => {
             this.clearHandlerCache();
+            this.clearAppData();
+
+
+            /**
+          * Clear the app cache and local storage.
+          */
+
         });
 
         CoreEvents.on(USER_PROFILE_REFRESHED, (data) => {
             const context = data.courseId ? CoreUserDelegateContext.COURSE : CoreUserDelegateContext.SITE;
             this.clearHandlerCache(data.userId, context, data.courseId);
         });
+    }
+    private clearAppData(): void {
+        try {
+            // Clear Local Storage
+            localStorage.clear();
+
+            // Clear Session Storage
+            sessionStorage.clear();
+
+            // Display a success toast (optional)
+        } catch (error) {
+        }
     }
 
     /**
@@ -506,7 +525,7 @@ export class CoreUserDelegateService extends CoreDelegate<CoreUserProfileHandler
         // eslint-disable-next-line deprecation/deprecation
         if (type == CoreUserDelegateService.TYPE_COMMUNICATION || type == CoreUserDelegateService.TYPE_ACTION) {
             handler.type = CoreUserProfileHandlerType.BUTTON;
-        // eslint-disable-next-line deprecation/deprecation
+            // eslint-disable-next-line deprecation/deprecation
         } else if (type == CoreUserDelegateService.TYPE_NEW_PAGE) {
             handler.type = CoreUserProfileHandlerType.LIST_ITEM;
 

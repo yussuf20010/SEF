@@ -65,24 +65,41 @@
                 <ion-item class="module" [class.item-dimmed]="!modOrSubsection.visible" [class.indented]="modOrSubsection.indented"
                     [class.item-hightlighted]="section.highlighted" (click)="selectSectionOrModule($event, section.id, modOrSubsection.id)"
                     button>
-                    <ion-icon class="completioninfo completion_none" name="" *ngIf="modOrSubsection.completionStatus === undefined"
-                        slot="start" aria-hidden="true" />
-                    <ion-icon class="completioninfo completion_incomplete" name="far-circle" *ngIf="modOrSubsection.completionStatus === 0"
-                        slot="start" [attr.aria-label]="'core.course.todo' | translate" />
-                    <ion-icon class="completioninfo completion_complete" name="fas-circle"
-                        *ngIf="modOrSubsection.completionStatus === 1 || modOrSubsection.completionStatus === 2" color="success"
-                        slot="start" [attr.aria-label]="'core.course.done' | translate" />
-                    <ion-icon class="completioninfo completion_fail" name="fas-xmark" *ngIf="modOrSubsection.completionStatus === 3"
-                        color="danger" slot="start" [attr.aria-label]="'core.course.failed' | translate" />
+                    <!-- Icon for Undefined Completion Status -->
+                    <ion-icon class="completioninfo completion_none" name="circle" *ngIf="modOrSubsection.completionStatus === undefined"
+                        slot="start" aria-hidden="true">
+                    </ion-icon>
+
+                    <!-- Icon for Incomplete Completion Status -->
+                    <ion-icon class="completioninfo completion_incomplete" name="circle" *ngIf="modOrSubsection.completionStatus === 0"
+                        slot="start" [attr.aria-label]="'core.course.todo' | translate">
+                    </ion-icon>
+
+                    <!-- Icon for Completed Status: Small White Circle -->
+                    <ion-icon class="completioninfo completion_complete" name="circle"
+                        *ngIf="modOrSubsection.completionStatus === 1 || modOrSubsection.completionStatus === 2" color="light" slot="start"
+                        [attr.aria-label]="'core.course.done' | translate">
+                    </ion-icon>
+
+                    <!-- Icon for Failed Completion Status -->
+                    <ion-icon class="completioninfo completion_fail" name="close-circle" *ngIf="modOrSubsection.completionStatus === 3"
+                        color="danger" slot="start" [attr.aria-label]="'core.course.failed' | translate">
+                    </ion-icon>
+
                     <ion-label>
                         <p class="item-heading">
                             <core-format-text [text]="modOrSubsection.name" contextLevel="module" [contextInstanceId]="modOrSubsection.id"
-                                [courseId]="modOrSubsection.course" />
+                                [courseId]="modOrSubsection.course">
+                            </core-format-text>
                         </p>
                     </ion-label>
-                    <ion-icon name="fas-lock" *ngIf="!modOrSubsection.uservisible" slot="end" class="restricted"
-                        [attr.aria-label]="'core.restricted' | translate" />
+
+                    <!-- Icon for Restricted Visibility -->
+                    <ion-icon name="lock-closed-outline" *ngIf="!modOrSubsection.uservisible" slot="end" class="restricted"
+                        [attr.aria-label]="'core.restricted' | translate">
+                    </ion-icon>
                 </ion-item>
+
                 }
             </ng-container>
         </ng-container>

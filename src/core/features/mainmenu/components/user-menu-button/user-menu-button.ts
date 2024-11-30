@@ -1,18 +1,5 @@
-// (C) Copyright 2015 Moodle Pty Ltd.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-import { Component, Input, OnInit, Optional } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Optional, Renderer2, Inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { CoreSiteInfo } from '@classes/sites/unauthenticated-site';
 import { CoreUserTourDirectiveOptions } from '@directives/user-tour';
 import { CoreUserToursAlignment, CoreUserToursSide } from '@features/usertours/services/user-tours';
@@ -24,15 +11,7 @@ import { CoreMainMenuUserMenuTourComponent } from '../user-menu-tour/user-menu-t
 import { CoreMainMenuUserMenuComponent } from '../user-menu/user-menu';
 import { CoreMainMenuPage } from '@features/mainmenu/pages/menu/menu';
 
-/**
- * Component to display an avatar on the header to open user menu.
- *
- * Example: <core-user-menu-button></core-user-menu-button>
- */
-
-
-
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -40,7 +19,7 @@ import { Subscription } from 'rxjs';
     templateUrl: 'user-menu-button.html',
     styleUrls: ['user-menu-button.scss'],
 })
-export class CoreMainMenuUserButtonComponent implements OnInit {
+export class CoreMainMenuUserButtonComponent implements OnInit, OnDestroy {
 
     @Input() alwaysShow = false;
     siteInfo?: CoreSiteInfo;
@@ -57,29 +36,64 @@ export class CoreMainMenuUserButtonComponent implements OnInit {
     constructor(
         protected routerOutlet: IonRouterOutlet,
         @Optional() protected menuPage: CoreMainMenuPage | null,
-        private translateService: TranslateService // Inject the TranslateService
+        private translateService: TranslateService,
+        private renderer: Renderer2,
+        @Inject(DOCUMENT) private document: Document
     ) {
-        this.siteInfo = CoreSites.getCurrentSite()?.getInfo();
+        this.refreshSiteInfo(); // Load site info initially
     }
 
     ngOnInit(): void {
         this.isMainScreen = !this.routerOutlet.canGoBack();
-        this.languageChangeSubscription = this.translateService.onLangChange.subscribe(() => {
-            this.refreshSiteInfo(); // Update siteInfo on language change
+
+        // Subscribe to language changes
+        this.languageChangeSubscription = this.translateService.onLangChange.subscribe((event: LangChangeEvent) => {
+            this.handleLanguageChange(event);
         });
+
+        // Set initial language and direction
+        this.updateLanguageAndDirection(this.translateService.currentLang);
+    }
+
+    ngOnDestroy(): void {
+        // Unsubscribe to avoid memory leaks
+        this.languageChangeSubscription?.unsubscribe();
     }
 
     /**
-     * Refresh site info data.
+     * Handle language change and update the UI immediately.
+     */
+    private handleLanguageChange(event: LangChangeEvent): void {
+        this.updateLanguageAndDirection(event.lang);
+        this.refreshSiteInfo(); // Refresh site info on language change
+    }
+
+    /**
+     * Update language and text direction based on the selected language.
+     */
+    private updateLanguageAndDirection(lang: string): void {
+        this.renderer.setAttribute(this.document.documentElement, 'lang', lang);
+        const direction = this.isRtlLanguage(lang) ? 'rtl' : 'ltr';
+        this.renderer.setAttribute(this.document.documentElement, 'dir', direction);
+    }
+
+    /**
+     * Check if the given language is an RTL (Right-to-Left) language.
+     */
+    private isRtlLanguage(lang: string): boolean {
+        const rtlLanguages = ['ar', 'he', 'fa', 'ur'];
+        return rtlLanguages.includes(lang);
+    }
+
+    /**
+     * Refresh the user site info.
      */
     private refreshSiteInfo(): void {
-        this.siteInfo = CoreSites.getCurrentSite()?.getInfo(); // Re-fetch siteInfo
+        this.siteInfo = CoreSites.getCurrentSite()?.getInfo(); // Update site information
     }
 
     /**
-     * Open User menu
-     *
-     * @param event Click event.
+     * Open the user menu.
      */
     openUserMenu(event: Event): void {
         event.preventDefault();
@@ -90,59 +104,3 @@ export class CoreMainMenuUserButtonComponent implements OnInit {
         });
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// @Component({
-//     selector: 'core-user-menu-button',
-//     templateUrl: 'user-menu-button.html',
-//     styleUrls: ['user-menu-button.scss'],
-// })
-// export class CoreMainMenuUserButtonComponent implements OnInit {
-//
-//     @Input() alwaysShow = false;
-//     siteInfo?: CoreSiteInfo;
-//     isMainScreen = false;
-//     userTour: CoreUserTourDirectiveOptions = {
-//         id: 'user-menu',
-//         component: CoreMainMenuUserMenuTourComponent,
-//         alignment: CoreUserToursAlignment.Start,
-//         side: CoreScreen.isMobile ? CoreUserToursSide.Start : CoreUserToursSide.End,
-//     };
-//
-//     constructor(protected routerOutlet: IonRouterOutlet, @Optional() protected menuPage: CoreMainMenuPage | null) {
-//         this.siteInfo = CoreSites.getCurrentSite()?.getInfo();
-//     }
-//
-//     /**
-//      * @inheritdoc
-//      */
-//     ngOnInit(): void {
-//         this.isMainScreen = !this.routerOutlet.canGoBack();
-//     }
-//
-//     /**
-//      * Open User menu
-//      *
-//      * @param event Click event.
-//      */
-//     openUserMenu(event: Event): void {
-//         event.preventDefault();
-//         event.stopPropagation();
-//
-//         CoreDomUtils.openSideModal<void>({
-//             component: CoreMainMenuUserMenuComponent,
-//         });
-//     }
-//
-// }

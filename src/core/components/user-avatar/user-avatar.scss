@@ -69,6 +69,10 @@
             background-color: var(--core-online-color);
         }
     }
+/* Example for RTL support */
+[dir="rtl"] {
+    text-align: right;
+}
 
     .userinitials {
         background-color: var(--gray-200);
