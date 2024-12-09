@@ -32,7 +32,7 @@ import { CoreModals } from '@services/modals';
 import { CoreNavigator } from '@services/navigator';
 import { CoreSites } from '@services/sites';
 import { CoreDomUtils } from '@services/utils/dom';
-import { CorePromiseUtils } from '@singletons/promise-utils';
+import { CoreUtils } from '@services/utils/utils';
 import { ModalController, Translate } from '@singletons';
 import { Subscription } from 'rxjs';
 
@@ -109,7 +109,7 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
 
                 // Only update handlers if they have changed, to prevent a blink effect.
                 if (newHandlers.length !== this.handlers.length ||
-                    JSON.stringify(newHandlers) !== JSON.stringify(this.handlers)) {
+                        JSON.stringify(newHandlers) !== JSON.stringify(this.handlers)) {
                     this.handlers = newHandlers;
                 }
 
@@ -119,7 +119,7 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
 
                 // Only update handlers if they have changed, to prevent a blink effect.
                 if (newHandlers.length !== this.handlers.length ||
-                    JSON.stringify(newHandlers) !== JSON.stringify(this.handlers)) {
+                        JSON.stringify(newHandlers) !== JSON.stringify(this.handlers)) {
                     this.accountHandlers = newHandlers;
                 }
 
@@ -141,28 +141,9 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
             return;
         }
 
-        const siteConfig = await CorePromiseUtils.ignoreErrors(currentSite.getPublicConfig());
+        const siteConfig = await CoreUtils.ignoreErrors(currentSite.getPublicConfig());
         this.siteLogo = currentSite.getLogoUrl(siteConfig);
         this.siteLogoLoaded = true;
-    }
-
-    /**
-     * Opens User profile page.
-     *
-     * @param event Click event.
-     */
-    async openUserProfile(event: Event): Promise<void> {
-        if (!this.siteInfo) {
-            return;
-        }
-
-        await this.close(event);
-
-        CoreNavigator.navigateToSitePath('user/about', {
-            params: {
-                userId: this.siteInfo.userid,
-            },
-        });
     }
     openPrivacyPolicy() {
         // Get the current app language from local storage without setting a default
@@ -186,6 +167,27 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
             console.error('Failed to open InAppBrowser. It may be blocked by the browser settings.');
         }
     }
+
+
+    /**
+     * Opens User profile page.
+     *
+     * @param event Click event.
+     */
+    async openUserProfile(event: Event): Promise<void> {
+        if (!this.siteInfo) {
+            return;
+        }
+
+        await this.close(event);
+
+        CoreNavigator.navigateToSitePath('user/about', {
+            params: {
+                userId: this.siteInfo.userid,
+            },
+        });
+    }
+
     /**
      * Opens preferences.
      *
@@ -284,15 +286,6 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
         if (thisModal && closeAll) {
             await ModalController.dismiss(undefined, undefined, thisModal.id);
         }
-    }
-
-    /**
-     * Add account.
-     *
-     * @param event Click event
-     */
-    async addAccount(event: Event): Promise<void> {
-        await this.close(event);
     }
 
     /**

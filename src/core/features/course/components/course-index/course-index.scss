@@ -40,9 +40,29 @@ ion-item.item {
                 }
             }
         }
-
+        ion-item {
+            &.expanded {
+              background-color: var(--primary-light);
+            }
+          }
+          
+          .accordion-content {
+            padding-left: 16px;
+            transition: max-height 0.3s ease-in-out;
+            overflow: hidden;
+          
+            ion-list {
+              padding: 0;
+              margin-top: 8px;
+            }
+          }
+          
+          ion-item.expanded ion-icon {
+            transform: rotate(180deg);
+          }
+          
         ion-icon.expandable-status-icon {
-            padding: 13px;
+            padding: 5px;
             margin: 3px;
             border-radius: 50%;
 

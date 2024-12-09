@@ -1,3 +1,13 @@
-<core-user-avatar *ngIf="(alwaysShow || (isMainScreen && menuPage?.tabsPlacement === 'bottom')) && siteInfo" [site]="siteInfo"
-    class="core-bar-button-image clickable" [userId]="siteInfo.userid" [linkProfile]="false" slot="start"
-    (ariaButtonClick)="openUserMenu($event)" [userTour]="userTour" [attr.aria-label]="'core.user.useraccount' | translate" />
+<core-user-avatar 
+*ngIf="(alwaysShow || (isMainScreen && menuPage?.tabsPlacement === 'bottom')) && siteInfo && user" 
+[site]="siteInfo"
+    class="core-usermenu-profile ion-text-wrap" 
+    lines="full"
+    [site]="siteInfo" 
+    [userId]="siteInfo.userid" 
+    [linkProfile]="false" 
+    slot="start"     
+    (ariaButtonClick)="openUserMenu($event)"
+    [attr.aria-label]="'core.user.profile' | translate">
+
+
