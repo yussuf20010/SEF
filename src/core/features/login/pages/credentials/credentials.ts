@@ -100,7 +100,6 @@ export class CoreLoginCredentialsPage implements OnInit, OnDestroy {
     async ngOnInit(): Promise<void> {
         // Clear app data when the page initializes
         this.clearAppData();
-//learnock@Mohameds-MacBook-Pro ~ % open -na "Google Chrome" --args --disable-web-security --user-data-dir=/tmp/chrome_dev
 
         // Use the fixed site URL directly
         const fixedSiteUrl = 'https://sef-testing-moodle.meemdev.com/';
