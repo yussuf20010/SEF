@@ -51,7 +51,7 @@ export class CoreCoursesHelperProvider {
      * @param courseId Course ID to get the category.
      * @returns Promise resolved with the list of courses and the category.
      */
-    async getCoursesForPopover(courseId?: number): Promise<{courses: CoreEnrolledCourseData[]; categoryId?: number}> {
+    async getCoursesForPopover(courseId?: number): Promise<{ courses: CoreEnrolledCourseData[]; categoryId?: number }> {
         const courses: CoreEnrolledCourseData[] = await CoreCourses.getUserCourses(false);
 
         // Add "All courses".
@@ -314,7 +314,7 @@ export class CoreCoursesHelperProvider {
                 courses = courses.filter((course) => !!course.isfavourite);
                 break;
             default:
-                // Filter not implemented.
+            // Filter not implemented.
         }
 
         switch (sort) {
