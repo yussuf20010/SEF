@@ -35,6 +35,7 @@ import { CoreDomUtils } from '@services/utils/dom';
 import { CoreUtils } from '@services/utils/utils';
 import { ModalController, Translate } from '@singletons';
 import { Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Component to display a user menu.
@@ -66,7 +67,9 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
     removeAccountOnLogout = false;
 
     protected subscription!: Subscription;
-
+    constructor(private translateService: TranslateService) {
+        const languageCode = localStorage.getItem('lang') || 'en';
+    }
     /**
      * @inheritdoc
      */
@@ -109,7 +112,7 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
 
                 // Only update handlers if they have changed, to prevent a blink effect.
                 if (newHandlers.length !== this.handlers.length ||
-                        JSON.stringify(newHandlers) !== JSON.stringify(this.handlers)) {
+                    JSON.stringify(newHandlers) !== JSON.stringify(this.handlers)) {
                     this.handlers = newHandlers;
                 }
 
@@ -119,7 +122,7 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
 
                 // Only update handlers if they have changed, to prevent a blink effect.
                 if (newHandlers.length !== this.handlers.length ||
-                        JSON.stringify(newHandlers) !== JSON.stringify(this.handlers)) {
+                    JSON.stringify(newHandlers) !== JSON.stringify(this.handlers)) {
                     this.accountHandlers = newHandlers;
                 }
 
@@ -145,29 +148,22 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
         this.siteLogo = currentSite.getLogoUrl(siteConfig);
         this.siteLogoLoaded = true;
     }
-    openPrivacyPolicy() {
-        // Get the current app language from local storage without setting a default
-        const lang = localStorage.getItem('lang');
+    openPrivacyPolicy(): void {
+        const currentLang = this.translateService.currentLang; // Get current language
 
-        // Choose the URL based on the language
-        const url = lang === 'en'
-            ? 'https://sef-testing-website.meemdev.com/privacy-guidelines/en'
-            : 'https://sef-testing-website.meemdev.com/privacy-guidelines/ar';
-
-        // Use the InAppBrowser to open the URL
-        const browser = window.open(url, '_blank', 'location=no'); // Open the URL in InAppBrowser
-
-        // Check if the browser was opened successfully
-        if (browser) {
-            // Optional: Close the browser on the exit event
-            browser.addEventListener('exit', () => {
-                console.log('InAppBrowser closed');
-            });
+        let url: string;
+        if (currentLang === 'ar') {
+            url = 'https://sef-testing-website.meemdev.com/privacy-guidelines/ar';
         } else {
-            console.error('Failed to open InAppBrowser. It may be blocked by the browser settings.');
+            url = 'https://sef-testing-website.meemdev.com/privacy-guidelines/en';
+        }
+
+        const browser = window.open(url, '_blank', 'location=no');
+        if (browser) {
+            browser.addEventListener('exit', () => {
+            });
         }
     }
-
 
     /**
      * Opens User profile page.
@@ -178,7 +174,6 @@ export class CoreMainMenuUserMenuComponent implements OnInit, OnDestroy {
         if (!this.siteInfo) {
             return;
         }
-
         await this.close(event);
 
         CoreNavigator.navigateToSitePath('user/about', {

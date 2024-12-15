@@ -98,12 +98,11 @@
             </ion-item>
             <ion-item button (click)="openPrivacyPolicy()" [attr.aria-label]="'core.privacy' | translate" [detail]="true"
                 class="core-user-menu-preferences core-user-menu-separator">
-                <ion-icon name="fas-user-shield" slot="start" aria-hidden="true" />
+                <ion-icon name="fas-user-shield" slot="start" aria-hidden="true"></ion-icon>
                 <ion-label>
                     <p class="item-heading">{{ 'core.privacy' | translate }}</p>
                 </ion-label>
             </ion-item>
-
         </ion-list>
     </core-loading>
 </ion-content>

@@ -18,6 +18,7 @@ import { CoreConstants } from '@/core/constants';
 import { CoreSites } from '@services/sites';
 import { CoreNavigator } from '@services/navigator';
 import { CoreSite } from '@classes/sites/site';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * App settings about menu page.
@@ -37,8 +38,11 @@ export class CoreSettingsAboutPage {
     currentSite?: CoreSite;
     showSurvey: boolean | undefined = false;
     legalDisclaimer = CoreConstants.CONFIG.legalDisclaimer;
+    currentLang: string;
 
-    constructor() {
+
+    constructor(private translateService: TranslateService) {
+        this.currentLang = localStorage.getItem('lang') || 'en';
         this.currentSite = CoreSites.getCurrentSite();
 
         this.appName = CoreConstants.CONFIG.appname;
@@ -49,28 +53,25 @@ export class CoreSettingsAboutPage {
             this.currentSite.getStoredConfig('sitepolicy'))) || CoreConstants.CONFIG.privacypolicy;
         this.showSurvey = this.currentSite?.isAdmin();
     }
-    openPrivacyPolicy() {
-        // Get the current app language from local storage without setting a default
-        const lang = localStorage.getItem('lang');
 
-        // Choose the URL based on the language
-        const url = lang === 'en'
-            ? 'https://sef-testing-website.meemdev.com/privacy-guidelines/en'
-            : 'https://sef-testing-website.meemdev.com/privacy-guidelines/ar';
+    openPrivacyPolicy(): void {
+        const currentLang = this.translateService.currentLang; // Get current language
 
-        // Use the InAppBrowser to open the URL
-        const browser = window.open(url, '_blank', 'location=no'); // Open the URL in InAppBrowser
-
-        // Check if the browser was opened successfully
-        if (browser) {
-            // Optional: Close the browser on the exit event
-            browser.addEventListener('exit', () => {
-                console.log('InAppBrowser closed');
-            });
+        let url: string;
+        if (currentLang === 'ar') {
+            url = 'https://sef-testing-website.meemdev.com/privacy-guidelines/ar';
         } else {
-            console.error('Failed to open InAppBrowser. It may be blocked by the browser settings.');
+            url = 'https://sef-testing-website.meemdev.com/privacy-guidelines/en';
+        }
+
+        const browser = window.open(url, '_blank', 'location=no');
+        if (browser) {
+            browser.addEventListener('exit', () => {
+            });
         }
     }
+
+
 
     /**
      * Opens a page.

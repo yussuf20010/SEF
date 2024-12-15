@@ -24,6 +24,7 @@ import { CoreNavigator } from '@services/navigator';
 import { Translate } from '@singletons';
 import { CoreDom } from '@singletons/dom';
 import { CoreViewer } from '@features/viewer/services/viewer';
+import { TranslateService } from '@ngx-translate/core';
 
 /**
  * Page that displays the more page of the app.
@@ -39,16 +40,16 @@ export class CoreMainMenuMorePage implements OnInit, OnDestroy {
     handlersLoaded = false;
     showScanQR: boolean;
     customItems?: CoreMainMenuCustomItem[];
-
+    currentLang: string;
     protected allHandlers?: CoreMainMenuHandlerData[];
     protected subscription!: Subscription;
     protected langObserver: CoreEventObserver;
     protected updateSiteObserver: CoreEventObserver;
     protected resizeListener?: CoreEventObserver;
 
-    constructor() {
+    constructor(private translateService: TranslateService) {
+        this.currentLang = localStorage.getItem('lang') || 'en';
         this.langObserver = CoreEvents.on(CoreEvents.LANGUAGE_CHANGED, () => this.loadCustomMenuItems());
-
         this.updateSiteObserver = CoreEvents.on(CoreEvents.SITE_UPDATED, async () => {
             this.customItems = await CoreMainMenu.getCustomMenuItems();
         }, CoreSites.getCurrentSiteId());
@@ -63,13 +64,13 @@ export class CoreMainMenuMorePage implements OnInit, OnDestroy {
      * @inheritdoc
      */
     ngOnInit(): void {
-        // Load the handlers.
+        this.translateService.setDefaultLang('en');
+        const currentLang = this.translateService.currentLang;
         this.subscription = CoreMainMenuDelegate.getHandlersObservable().subscribe((handlers) => {
             this.allHandlers = handlers;
 
             this.initHandlers();
         });
-
         this.resizeListener = CoreDom.onWindowResize(() => {
             this.initHandlers();
         });
@@ -86,28 +87,24 @@ export class CoreMainMenuMorePage implements OnInit, OnDestroy {
         this.subscription?.unsubscribe();
         this.resizeListener?.off();
     }
-    openPrivacyPolicy() {
-        // Get the current app language from local storage without setting a default
-        const lang = localStorage.getItem('lang');
 
-        // Choose the URL based on the language
-        const url = lang === 'en'
-            ? 'https://sef-testing-website.meemdev.com/privacy-guidelines/en'
-            : 'https://sef-testing-website.meemdev.com/privacy-guidelines/ar';
+    openPrivacyPolicy(): void {
+        const currentLang = this.translateService.currentLang; // Get current language
 
-        // Use the InAppBrowser to open the URL
-        const browser = window.open(url, '_blank', 'location=no'); // Open the URL in InAppBrowser
-
-        // Check if the browser was opened successfully
-        if (browser) {
-            // Optional: Close the browser on the exit event
-            browser.addEventListener('exit', () => {
-                console.log('InAppBrowser closed');
-            });
+        let url: string;
+        if (currentLang === 'ar') {
+            url = 'https://sef-testing-website.meemdev.com/privacy-guidelines/ar';
         } else {
-            console.error('Failed to open InAppBrowser. It may be blocked by the browser settings.');
+            url = 'https://sef-testing-website.meemdev.com/privacy-guidelines/en';
+        }
+
+        const browser = window.open(url, '_blank', 'location=no');
+        if (browser) {
+            browser.addEventListener('exit', () => {
+            });
         }
     }
+
 
     /**
      * Init handlers on change (size or handlers).
@@ -174,7 +171,7 @@ export class CoreMainMenuMorePage implements OnInit, OnDestroy {
         }
 
         // Check if it's a URL.
-        if (/^[^:]{2,}:\/\/[^ ]+$/i.test(text)) {
+        if (/^ [^: ]{ 2,}: \/\/[^ ]+$/i.test(text)) {
             await CoreSites.visitLink(text, {
                 checkRoot: true,
                 openBrowserRoot: true,
