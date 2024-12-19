@@ -153,6 +153,7 @@
         "check-es-compat": "^3.2.1",
         "circular-dependency-plugin": "^5.2.2",
         "concurrently": "^8.2.2",
+        "cordova-plugin-media": "^7.0.0",
         "cordova-plugin-moodleapp": "file:cordova-plugin-moodleapp",
         "cross-env": "^7.0.3",
         "eslint": "^8.57.1",
@@ -237,7 +238,8 @@
             "cordova-plugin-wkuserscript": {},
             "cordova-plugin-wkwebview-cookies": {},
             "cordova-sqlite-storage": {},
-            "nl.kingsquare.cordova.background-audio": {}
+            "nl.kingsquare.cordova.background-audio": {},
+            "cordova-plugin-media": {}
         }
     }
 }
