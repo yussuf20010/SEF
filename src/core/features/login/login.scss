@@ -1,0 +1,168 @@
+@use "theme/globals" as *;
+
+:host {
+
+    ion-content,
+    ion-list {
+        --background: #1c0c2c;
+        --ion-item-background: #1c0c2c;
+        --color: var(--core-login-text-color);
+    }
+
+    ion-item ion-label {
+        --color: var(--core-login-text-color);
+
+        p,
+        h2,
+        h3,
+        .core-oauth-icon {
+            color: var(--color);
+        }
+    }
+
+    ion-button.core-button-as-link {
+        --color: var(--core-login-text-color);
+        text-decoration-color: var(--color);
+    }
+
+    .core-login-info-box {
+        margin-bottom: 32px;
+
+        .core-login-site {
+            .core-login-site-logo {
+                width: 90%;
+                max-width: 300px;
+                margin: 150px auto;
+                /* Top margin for logo */
+
+                img {
+                    max-width: 100%;
+                    max-height: 104px;
+                }
+            }
+        }
+    }
+
+    ion-button {
+        margin-left: 0;
+        margin-right: 0;
+        --background: #9370db;
+        /* Nearly purple color */
+        --border-radius: 8px;
+        --color: white;
+        padding: 12px 24px;
+        font-weight: bold;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        /* Center align button content (icon and text) */
+        justify-content: center;
+        /* Center the content horizontally */
+    }
+
+    .core-login-login-button {
+        margin-top: 20px;
+        /* Increase margin-top for more space below the logo */
+        margin-bottom: 40px;
+        /* Move the button down by 10px */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Ensure icon and text are centered */
+    }
+
+    .core-login-login-button ion-icon {
+        margin-right: 10px; /* Ensure some space between icon and text */
+        order: -1; /* Position icon before text */
+        font-size: 1.2rem; /* Ensure the icon size is large enough */
+    }
+
+
+    .core-login-login-button span {
+        display: inline-block;
+        /* Ensure text is inline with the icon */
+        font-size: 1rem;
+        /* Standard font size for text */
+    }
+
+
+
+    ion-button[aria-label="Settings"] {
+        color: white;
+        /* Ensure settings icon appears white */
+        position: absolute;
+        top: 10px;
+        /* Position settings icon above */
+        right: 10px;
+        z-index: 10;
+        /* Ensure it appears on top of other elements */
+    }
+
+    .core-login-methods-separator {
+        position: relative;
+        padding: 8px 0;
+
+        span {
+            background: var(--core-login-background);
+            padding: 0 8px;
+        }
+
+        &::before {
+            height: 1px;
+            position: absolute;
+            top: 50%;
+            left: 0px;
+            right: 0px;
+            border-bottom: 1px solid var(--gray-300);
+            content: "";
+            z-index: -1;
+        }
+    }
+
+    @if ($core-login-hide-qrcode) {
+
+        .core-login-site-qrcode,
+        .core-login-methods-separator {
+            display: none;
+        }
+    }
+
+    .core-login-login-inbrowser-button {
+        margin-bottom: 8px;
+    }
+
+    p.core-login-inbrowser {
+        font: var(--mdl-typography-body-font-sm);
+        margin-top: 8px;
+        margin-bottom: 8px;
+    }
+
+    .core-login-sign-up {
+        margin-top: 8px;
+        border-top: 1px solid var(--gray-300);
+    }
+
+    .core-login-identity-providers h2,
+    .core-login-sign-up h2 {
+        margin-top: 16px;
+        margin-bottom: 8px;
+        font: var(--mdl-typography-heading6-font);
+    }
+}
+
+:host-context(:root.dark) {
+    @if ($core-login-button-outline-dark) {
+        form ion-button {
+            --background: white;
+            --color: var(--core-login-background-dark);
+        }
+    }
+
+    @if ($core-login-loading-color-dark) {
+        core-loading {
+            --loading-background: var(--core-login-background-dark);
+            --loading-text-color: #{$core-login-loading-color-dark};
+            --loading-spinner: #{$core-login-loading-color-dark};
+        }
+    }
+}
